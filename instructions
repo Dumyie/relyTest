@@ -1,0 +1,29 @@
+Installation instructions – Ubuntu
+Run apt-get update
+Install python 3.8  - run sudo apt install python3.8
+Check python version - python3.8 --version
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install virtualenv
+
+Pull the code into
+cd ~/relyTe
+
+create virtual environment virtualenv relytestenv
+
+Activate virtual env source myprojectenv/bin/activate
+
+Make sure you are in the root of the relyTest code base
+
+Install dependencies pip3 install -r requirements.txt
+
+Edit settings file nano ~/relyTest /relyTest/settings.py – we need to update the ALLOWEDHOSTS to include the IP/domainname of the server you are running the app from.
+
+Update the BASE_DIR STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+Gather all the static files by running
+~/relyTest/manage.py collectstatic
+
+Run sudo ufw allow 8000 to allow for the port to be accessible
+
+~/relyTest/manage.py runserver 0.0.0.0:8000

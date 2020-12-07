@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %} AML | New Application {% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row pull-left">
+            <a class="btn btn-primary" href="javascript:history.back()" style="margin-right: 0px;">Go Back</a>
+        </div>
+        <h1 style="text-align: center">New application</h1>
+        <hr>
+        <form method="post" action="{% url 'new-application' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>First name:</label>
+                <input type="text" class="form-control" required id="first-name" name="first_name">
+            </div>
+            <div class="form-group">
+                <label>Last name:</label>
+                <input type="text" class="form-control" required id="last-name" name="last_name">
+            </div>
+            <div class="form-group">
+                <label>Date of Birth:</label>
+                <input type="text" class="form-control" required id="dob" name="dob">
+            </div>
+            <div class="form-group">
+                <label>Monthly income:</label>
+                <input type="number" class="form-control" required id="monthly-income" name="monthly_income">
+            </div>
+            <button class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $(function () {
+            $("#dob").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
+{% endblock %}

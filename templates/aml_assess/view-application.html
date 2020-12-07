@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %} AML | List Applications {% endblock %}
+{% block content %}
+    <div class="container" style="padding: 20px;">
+        <div class="row pull-left">
+            <a class="btn btn-primary" href="javascript:history.back()" style="margin-right: 0px;">Go Back</a>
+        </div>
+        <h1 style="text-align: center">View application</h1>
+        <hr>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>First name:</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>{{ application.customer.first_name }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Last name:</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>{{ application.customer.last_name }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Date of Birth:</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>{{ application.customer.dob }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Monthly income:</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>{{ application.customer.monthly_income }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Is this customer sanctioned? {{ application.sanctioned }}</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>
+                    {% if not application.sanctioned %}
+                        <span class="badge badge-success">No</span>
+                    {% elif application.sanctioned %}
+                        <span class="badge badge-danger">Yes</span>
+                    {% else %}
+                        <span class="badge badge-danger">Pending</span>
+                    {% endif %}
+                </h2>
+                <table class="table table-striped"
+                        {% if not application.sanctioned %}
+                       style="display:none;"
+                        {% endif %}
+                >
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Date of birth</th>
+                    </tr>
+                    <tbody>
+                    {% for i in matches %}
+                        <td>{{ i.first_name }}</td>
+                        <td>{{ i.last_name }}</td>
+                        <td>{{ i.dob }}</td>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                {% if application.sanctioned %}
+                    <a href="{% url 'deny-application' application.id %}" class="btn btn-danger pull-right">Confirm
+                        match</a>
+                    <a href="{% url 'reject-match' application.id %}" class="btn btn-primary pull-left">Decline
+                        match</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Is this customer PEP?</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>
+                    {% if not application.pep and application.pep != None %}
+                        <span class="badge badge-success">No</span>
+                    {% elif application.pep %}
+                        <span class="badge badge-danger">Yes</span>
+                    {% else %}
+                        <span class="badge badge-primary">Unknown</span>
+                    {% endif %}
+                </h2>
+                <table class="table table-striped"
+                        {% if not application.pep %}
+                       style="display:none;"
+                        {% endif %}
+                >
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Date of birth</th>
+                    </tr>
+                    <tbody>
+                    {% for i in matches %}
+                        <td>{{ i.first_name }}</td>
+                        <td>{{ i.last_name }}</td>
+                        <td>{{ i.dob }}</td>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                {% if application.pep == None %}
+                    <a href="{% url 'verify-pep' application.id %}" class="btn btn-success pull-left">Verify Customer
+                        with PEP</a>
+                {% endif %}
+                {% if application.pep %}
+                    <a href="{% url 'reject-pep-match' application.id %}" class="btn btn-info pull-right">Validate match</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="offset-md-4 col-md-4">
+            {% if application.status != 'Approved' and not application.pep%}
+                 <a href="{% url 'submit-risk-assessment' application.id %}" class="btn btn-info pull-left">Submit for risk
+                assessment</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
